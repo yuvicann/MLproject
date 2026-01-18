@@ -1,0 +1,3 @@
+[2026-01-18 09:56:29,449] INFO - __main__ - 🚀 Training pipeline started
+[2026-01-18 09:56:29,450] INFO - __main__ - ✅ Model saved at: artifacts/model.pkl
+[2026-01-18 09:56:29,450] INFO - __main__ - 🎉 Training pipeline completed successfully
