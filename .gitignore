@@ -1,13 +1,12 @@
 .venv/
-venv/
-__pycache__/
-*.pyc
-.DS_Store
-.ipynb_checkpoints/
 __pycache__/
 *.egg-info/
 build/
 dist/
-
+catboost_info/
+.ipynb_checkpoints/
+logs/
+artifacts/
+.DS_Store
 
 
