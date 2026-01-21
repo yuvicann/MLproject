@@ -7,6 +7,7 @@ catboost_info/
 .ipynb_checkpoints/
 logs/
 artifacts/
+catboost_info/
 .DS_Store
 
 
