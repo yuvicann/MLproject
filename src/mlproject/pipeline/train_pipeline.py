@@ -1,50 +1,48 @@
-import os
 import sys
-from dataclasses import dataclass
 
 from mlproject.logger import get_logger
 from mlproject.exception import CustomException
-from mlproject.utils.common import save_object
+
+from mlproject.components.data_ingestion import DataIngestion
+from mlproject.components.data_transformation import DataTransformation
+from mlproject.components.model_trainer import ModelTrainer
 
 log = get_logger(__name__)
 
 
-@dataclass
-class TrainingConfig:
-    artifacts_dir: str = "artifacts"
-    model_path: str = os.path.join("artifacts", "model.pkl")
-
-
 class TrainPipeline:
-    def __init__(self):
-        self.config = TrainingConfig()
-
-    def run(self):
-        """
-        Full training pipeline steps (skeleton):
-        1) Load / ingest data
-        2) Preprocess / transform
-        3) Train model
-        4) Evaluate model
-        5) Save model artifact
-        """
+    def run_pipeline(self):
         try:
-            log.info("🚀 Training pipeline started")
+            log.info("🚀 Training Pipeline started")
 
-            # ---------------------------
-            # TODO: Replace this with real pipeline steps
-            # ---------------------------
-            dummy_model = {"model": "replace_with_real_model"}
+            # ✅ Dataset path based on your structure
+            input_csv_path = "notebooks/data/stud.csv"
 
-            save_object(self.config.model_path, dummy_model)
-            log.info(f"✅ Model saved at: {self.config.model_path}")
+            # 1) Data Ingestion
+            ingestion = DataIngestion()
+            raw_data_path = ingestion.initiate_data_ingestion(input_csv_path)
 
-            log.info("🎉 Training pipeline completed successfully")
+            # 2) Data Transformation
+            transformation = DataTransformation()
+            X_train, X_test, y_train, y_test, preprocessor_path = transformation.initiate_data_transformation(
+                raw_data_path
+            )
+
+            # 3) Model Training
+            trainer = ModelTrainer()
+            model_path, best_model_name, best_score = trainer.initiate_model_training(
+                X_train, X_test, y_train, y_test
+            )
+
+            log.info("✅ Training Pipeline completed successfully")
+            log.info(f"Best Model: {best_model_name}, R2 Score: {best_score}")
+            log.info(f"Model saved at: {model_path}")
+            log.info(f"Preprocessor saved at: {preprocessor_path}")
 
         except Exception as e:
-            log.error("❌ Training pipeline failed", exc_info=True)
             raise CustomException(str(e), sys)
 
 
 if __name__ == "__main__":
-    TrainPipeline().run()
+    TrainPipeline().run_pipeline()
+

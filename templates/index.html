@@ -1,73 +1,173 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Student Performance Predictor</title>
-    <style>
-        body { font-family: Arial; margin: 40px; }
-        form { max-width: 500px; }
-        label { font-weight: bold; display: block; margin-top: 15px; }
-        input, select { width: 100%; padding: 8px; margin-top: 6px; }
-        button { margin-top: 20px; padding: 10px 20px; cursor: pointer; }
-        .result { margin-top: 25px; font-size: 18px; font-weight: bold; color: green; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Student Performance Predictor</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
 
-    <h2>🎓 Student Math Score Predictor</h2>
+<body class="bg-light">
 
-    <form action="/predict_form" method="POST">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
 
-        <label>Gender</label>
-        <select name="gender">
-            <option value="female">Female</option>
-            <option value="male">Male</option>
-        </select>
+        <div class="card shadow-sm rounded-4">
+          <div class="card-body p-4">
 
-        <label>Race/Ethnicity</label>
-        <select name="race_ethnicity">
-            <option value="group A">Group A</option>
-            <option value="group B">Group B</option>
-            <option value="group C">Group C</option>
-            <option value="group D">Group D</option>
-            <option value="group E">Group E</option>
-        </select>
+            <h2 class="mb-1">🎓 Student Math Score Predictor</h2>
+            <p class="text-muted mb-4">Fill the form and get predicted Math score instantly.</p>
 
-        <label>Parental Level of Education</label>
-        <select name="parental_level_of_education">
-            <option value="some high school">Some High School</option>
-            <option value="high school">High School</option>
-            <option value="some college">Some College</option>
-            <option value="associate's degree">Associate's Degree</option>
-            <option value="bachelor's degree">Bachelor's Degree</option>
-            <option value="master's degree">Master's Degree</option>
-        </select>
+            <form action="/predict_form" method="POST" class="needs-validation" novalidate>
 
-        <label>Lunch</label>
-        <select name="lunch">
-            <option value="standard">Standard</option>
-            <option value="free/reduced">Free/Reduced</option>
-        </select>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Gender</label>
+                  <select name="gender" class="form-select" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                  </select>
+                  <div class="invalid-feedback">Please select gender.</div>
+                </div>
 
-        <label>Test Preparation Course</label>
-        <select name="test_preparation_course">
-            <option value="none">None</option>
-            <option value="completed">Completed</option>
-        </select>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Race/Ethnicity</label>
+                  <select name="race_ethnicity" class="form-select" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="group A">Group A</option>
+                    <option value="group B">Group B</option>
+                    <option value="group C">Group C</option>
+                    <option value="group D">Group D</option>
+                    <option value="group E">Group E</option>
+                  </select>
+                  <div class="invalid-feedback">Please select race/ethnicity.</div>
+                </div>
 
-        <label>Reading Score</label>
-        <input type="number" name="reading_score" min="0" max="100" required>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Parental Education</label>
+                  <select name="parental_level_of_education" class="form-select" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="some high school">Some High School</option>
+                    <option value="high school">High School</option>
+                    <option value="some college">Some College</option>
+                    <option value="associate's degree">Associate's Degree</option>
+                    <option value="bachelor's degree">Bachelor's Degree</option>
+                    <option value="master's degree">Master's Degree</option>
+                  </select>
+                  <div class="invalid-feedback">Please select parental education.</div>
+                </div>
 
-        <label>Writing Score</label>
-        <input type="number" name="writing_score" min="0" max="100" required>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Lunch</label>
+                  <select name="lunch" class="form-select" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="standard">Standard</option>
+                    <option value="free/reduced">Free/Reduced</option>
+                  </select>
+                  <div class="invalid-feedback">Please select lunch type.</div>
+                </div>
 
-        <button type="submit">Predict Math Score</button>
-    </form>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Test Preparation</label>
+                  <select name="test_preparation_course" class="form-select" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="none">None</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                  <div class="invalid-feedback">Please select test preparation.</div>
+                </div>
 
-    {% if result %}
-        <div class="result">
-            ✅ Predicted Math Score: {{ result }}
+                <div class="col-md-3">
+                  <label class="form-label fw-semibold">Reading Score</label>
+                  <input type="number" class="form-control" name="reading_score" min="0" max="100" required>
+                  <div class="invalid-feedback">Score must be 0–100.</div>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label fw-semibold">Writing Score</label>
+                  <input type="number" class="form-control" name="writing_score" min="0" max="100" required>
+                  <div class="invalid-feedback">Score must be 0–100.</div>
+                </div>
+              </div>
+
+              <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary px-4">Predict</button>
+                <a href="/" class="btn btn-outline-secondary">Reset</a>
+              </div>
+            </form>
+
+            {% if result is not none %}
+              <div class="alert alert-success mt-4 rounded-4">
+                ✅ Predicted Math Score: <b>{{ result }}</b>
+              </div>
+
+              <div class="card mt-3 rounded-4">
+                <div class="card-body">
+                  <h5 class="mb-3">📊 Predicted Score Graph</h5>
+                  <canvas id="scoreChart" height="110"></canvas>
+                </div>
+              </div>
+
+              <script>
+                const predictedScore = {{ result }};
+                const ctx = document.getElementById('scoreChart');
+
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: ['Predicted Math Score'],
+                    datasets: [{
+                      label: 'Score',
+                      data: [predictedScore],
+                      borderWidth: 1
+                    }]
+                  },
+                  options: {
+                    responsive: true,
+                    scales: {
+                      y: { beginAtZero: true, max: 100 }
+                    }
+                  }
+                });
+              </script>
+            {% endif %}
+
+          </div>
         </div>
-    {% endif %}
+
+        <p class="text-center text-muted mt-4 mb-0">
+          Built with Flask + ML Pipeline ✅
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Bootstrap validation
+    (function () {
+      'use strict'
+      const forms = document.querySelectorAll('.needs-validation')
+      Array.from(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+  </script>
 
 </body>
 </html>
+
+
